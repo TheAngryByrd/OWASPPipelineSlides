@@ -53,6 +53,7 @@
 <h3>Security Automation in your Continuous Integration Pipeline</h3>
 <p><img src="images/Continuous-Integration.png" alt="FsReveal" /></p>
 <p>Jimmy Byrd</p>
+<p><a href="https://theangrybyrd.github.io/OWASPPipelineSlides">https://theangrybyrd.github.io/OWASPPipelineSlides</a></p>
 </section>
 <section >
 <h3>Jimmy Byrd?</h3>
@@ -75,16 +76,58 @@
 </blockquote>
 </section>
 <section >
-<h3>How it might seem</h3>
-<p><img src="images/ci-rube.gif" alt="CI Rube Goldeberg" /></p>
+<h3>Why?</h3>
+<p>To prevent:</p>
+<p><img src="images/works-on-mine.jpg" alt="Works on my machine" /></p>
 </section>
 <section >
-<h3>Continuous Integration Lifecycle (Simplified)</h3>
-<ul>
-<li>Build</li>
+<h3>Continuous Integration</h3>
+<ol>
+<li>Push</li>
+<li>Build*</li>
 <li>Test</li>
-<li>Deploy</li>
-</ul>
+<li>Report</li>
+</ol>
+</section>
+<section >
+<h3>Merging code</h3>
+<p><img src="images/git-merge.gif" alt="Mergeing code" /></p>
+</section>
+<section >
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="o">.</span><span class="o">/</span><span class="i">build</span><span class="o">.</span><span class="i">sh</span>
+
+<span class="o">---------------------------------------------------------------------</span>
+<span class="i">Build</span> <span class="i">Report</span>
+<span class="o">---------------------------------------------------------------------</span>
+<span class="i">Target</span>           <span class="i">Duration</span>
+<span class="o">------</span>           <span class="o">--------</span>
+<span class="i">RestoreNpm</span>       <span class="n">00</span><span class="o">:</span><span class="n">00</span><span class="o">:</span><span class="n">32.4737389</span>
+<span class="i">PackWebAssets</span>    <span class="n">00</span><span class="o">:</span><span class="n">00</span><span class="o">:</span><span class="n">03.7281990</span>
+<span class="i">Linter</span>           <span class="n">00</span><span class="o">:</span><span class="n">00</span><span class="o">:</span><span class="n">03.3159012</span>
+<span class="i">Compile</span>          <span class="n">00</span><span class="o">:</span><span class="n">00</span><span class="o">:</span><span class="n">22.2821302</span>
+<span class="i">RunTests</span>         <span class="n">00</span><span class="o">:</span><span class="n">00</span><span class="o">:</span><span class="n">04.9936549</span>
+<span class="i">ScanCode</span>         <span class="n">00</span><span class="o">:</span><span class="n">02</span><span class="o">:</span><span class="n">04.0223912</span>
+<span class="i">Status</span><span class="o">:</span>          <span class="i">Ok</span> 
+<span class="o">---------------------------------------------------------------------</span>
+</code></pre></td>
+</tr>
+</table>
 </section>
 <section >
 <h3>CI Tools</h3>
@@ -99,25 +142,29 @@
 <section >
 <section >
 <h3>Testing</h3>
+<p><img src="images/first-test.gif" alt="Baby Rhino Escape" /></p>
+</section>
+<section >
+<h3>Security Testing</h3>
 <p><img src="images/baby-rhino.gif" alt="Baby Rhino Escape" /></p>
 </section>
 <section >
 <h3>Automated testing hierarchy</h3>
 <p><img src="images/testing-pyramid.jpg" alt="Automated Testing Pyramid" /></p>
 </section>
+</section>
 <section >
 <h3><a href="https://www.ruggedsoftware.org/">The Rugged Manifesto</a></h3>
-<p>I am rugged and, more importantly, my code is rugged.
-I recognize that software has become a foundation of our modern world.
-I recognize the awesome responsibility that comes with this foundational role.
-I recognize that my code will be used in ways I cannot anticipate, in ways it was not designed, and for longer than it was ever intended.
-I recognize that my code will be attacked by talented and persistent adversaries who threaten our physical, economic and national security.</p>
+<p>I am rugged and, more importantly, my code is rugged.</p>
+<p>I recognize that software has become a foundation of our modern world.</p>
+<p>I recognize the awesome responsibility that comes with this foundational role.</p>
+<p>I recognize that my code will be used in ways I cannot anticipate, in ways it was not designed, and for longer than it was ever intended.</p>
+<p>I recognize that my code will be attacked by talented and persistent adversaries who threaten our physical, economic and national security.</p>
 <p>I recognize these things – and I choose to be rugged.</p>
-<p>I am rugged because I refuse to be a source of vulnerability or weakness.
-I am rugged because I assure my code will support its mission.
-I am rugged because my code can face these challenges and persist in spite of them.
-I am rugged, not because it is easy, but because it is necessary and I am up for the challenge.</p>
-</section>
+<p>I am rugged because I refuse to be a source of vulnerability or weakness.</p>
+<p>I am rugged because I assure my code will support its mission.</p>
+<p>I am rugged because my code can face these challenges and persist in spite of them.</p>
+<p>I am rugged, not because it is easy, but because it is necessary and I am up for the challenge.</p>
 </section>
 <section >
 <section >
@@ -126,6 +173,14 @@ I am rugged, not because it is easy, but because it is necessary and I am up for
 <p>Pipeline is a framework for running a series of tools. Generally, it is intended as a backbone for automating a security analysis pipeline of tools.</p>
 <p>Github README</p>
 </blockquote>
+</section>
+<section >
+<h3>Maintainers</h3>
+<ul>
+<li><a href="https://twitter.com/matt_tesauro">Matt Tesauro</a></li>
+<li><a href="https://twitter.com/weavera">Aaron Weaver</a></li>
+<li><a href="https://twitter.com/mkonda">Matt Konda</a></li>
+</ul>
 </section>
 <section >
 <h3>Four simple concepts</h3>
@@ -362,11 +417,25 @@ zap.rb:             "live"
 </section>
 </section>
 <section >
-<h3>Stages of tasks</h3>
+<h3>Building your own task/filter/reporter is pretty easy</h3>
+</section>
+<section >
+<section >
+<h3>First time on your code</h3>
+<p><img src="images/bug-report.gif" alt="Bug report" /></p>
+</section>
+<section >
+<h3>Knowing is half the battle</h3>
+<p><img src="images/gi-joe.gif" alt="GI Joe" /></p>
+</section>
+</section>
+<section >
+<h3>Resources</h3>
 <ul>
-<li>Files</li>
-<li>Code</li>
-<li>Live</li>
+<li><a href="https://www.owasp.org/index.php/OWASP_AppSec_Pipeline">OWASP Pipeline</a></li>
+<li><a href="https://github.com/OWASP/pipeline">OWASP Pipeline Github</a></li>
+<li><a href="https://www.youtube.com/watch?v=LfVhB3EiDDs">Pipelines, DevOps and making things better - Matt Tesauro</a></li>
+<li><a href="https://www.youtube.com/watch?v=_IushM9Ng7A">Design Approaches for Security Automation - Peleus Uhley</a></li>
 </ul>
 </section>
 

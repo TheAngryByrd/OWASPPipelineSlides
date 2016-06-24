@@ -12,6 +12,8 @@
 
 Jimmy Byrd
 
+https://theangrybyrd.github.io/OWASPPipelineSlides
+
 ***
 
 ### Jimmy Byrd?

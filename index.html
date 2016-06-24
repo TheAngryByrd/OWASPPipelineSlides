@@ -1,0 +1,410 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Security Automation in your Continuous Integration Pipeline</title>
+    <meta name="description" content="Developers use unit tests and acceptances tests in continuous integration (CI) to find bugs early and often in a repeatable way. Security is an important part of any software development life cycle. So why not add security analysis tools to this pipeline? This talk will cover adding and using OWASP/pipeline, a framework made for running security analysis tools in CI.">
+    <meta name="author" content="Jimmy Byrd">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/night.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="css/custom.css" />
+    <script src="fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/fsreveal.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <script language="javascript" type="text/javascript">
+        function init()
+        {
+            websocket = new WebSocket("ws://"+window.location.host+"/websocket");
+            websocket.onmessage = function(evt) { location.reload(); };
+        }
+        window.addEventListener("load", init, false);
+    </script>
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+<h3>Security Automation in your Continuous Integration Pipeline</h3>
+<p><img src="images/Continuous-Integration.png" alt="FsReveal" /></p>
+<p>Jimmy Byrd</p>
+</section>
+<section >
+<h3>Jimmy Byrd?</h3>
+<ul>
+<li><a href="https://twitter.com/Jimmy_Byrd">@jimmy_byrd</a></li>
+<li><a href="https://github.com/theangrybyrd">Github</a></li>
+<li>Lead Developer at <a href="https://www.binarydefense.com/">Binary Defense Systems</a></li>
+</ul>
+<p><img src="images/bds.png" alt="Binary Defense Systems" /></p>
+</section>
+<section >
+<section >
+<h3>Continuous what now?</h3>
+</section>
+<section >
+<h3><a href="http://martinfowler.com/articles/continuousIntegration.html">Continuous Integration</a></h3>
+<blockquote>
+<p>Continuous Integration is a software development practice where members of a team integrate their work frequently . . . Each integration is verified by an automated build (<em>including test</em>) to detect integration errors as quickly as possible.</p>
+<p>Martin Fowler</p>
+</blockquote>
+</section>
+<section >
+<h3>How it might seem</h3>
+<p><img src="images/ci-rube.gif" alt="CI Rube Goldeberg" /></p>
+</section>
+<section >
+<h3>Continuous Integration Lifecycle (Simplified)</h3>
+<ul>
+<li>Build</li>
+<li>Test</li>
+<li>Deploy</li>
+</ul>
+</section>
+<section >
+<h3>CI Tools</h3>
+<ul>
+<li><a href="https://www.jetbrains.com/teamcity/">Teamcity</a></li>
+<li><a href="https://jenkins.io/">Jenkins</a></li>
+<li><a href="https://about.gitlab.com/gitlab-ci/">Gitlab</a></li>
+<li><a href="https://travis-ci.org/">Travis</a></li>
+</ul>
+</section>
+</section>
+<section >
+<section >
+<h3>Testing</h3>
+<p><img src="images/baby-rhino.gif" alt="Baby Rhino Escape" /></p>
+</section>
+<section >
+<h3>Automated testing hierarchy</h3>
+<p><img src="images/testing-pyramid.jpg" alt="Automated Testing Pyramid" /></p>
+</section>
+<section >
+<h3><a href="https://www.ruggedsoftware.org/">The Rugged Manifesto</a></h3>
+<p>I am rugged and, more importantly, my code is rugged.
+I recognize that software has become a foundation of our modern world.
+I recognize the awesome responsibility that comes with this foundational role.
+I recognize that my code will be used in ways I cannot anticipate, in ways it was not designed, and for longer than it was ever intended.
+I recognize that my code will be attacked by talented and persistent adversaries who threaten our physical, economic and national security.</p>
+<p>I recognize these things – and I choose to be rugged.</p>
+<p>I am rugged because I refuse to be a source of vulnerability or weakness.
+I am rugged because I assure my code will support its mission.
+I am rugged because my code can face these challenges and persist in spite of them.
+I am rugged, not because it is easy, but because it is necessary and I am up for the challenge.</p>
+</section>
+</section>
+<section >
+<section >
+<h3><a href="https://github.com/OWASP/pipeline">OWASP/Pipeline</a></h3>
+<blockquote>
+<p>Pipeline is a framework for running a series of tools. Generally, it is intended as a backbone for automating a security analysis pipeline of tools.</p>
+<p>Github README</p>
+</blockquote>
+</section>
+<section >
+<h3>Four simple concepts</h3>
+<ul>
+<li>Mounters</li>
+<li>Tasks</li>
+<li>Filters</li>
+<li>Reporters</li>
+</ul>
+</section>
+<section >
+<h3>What's in the box? (MOUNTERS)</h3>
+<ul>
+<li>Docker</li>
+<li>File System</li>
+<li>Git</li>
+<li>ISO</li>
+<li>URL</li>
+</ul>
+</section>
+<section >
+<h3>What's in the box? (TASKS)</h3>
+<ul>
+<li><a href="https://www.clamav.net/">ClamAV</a></li>
+<li><a href="http://brakemanscanner.org/">Breakman</a> (Ruby)</li>
+<li><a href="https://github.com/rubysec/bundler-audit">Bundle-Audit</a> (Ruby)</li>
+<li><a href="https://www.checkmarx.com/">Checkmarx</a> (Code)</li>
+<li><a href="https://github.com/thesp0nge/dawnscanner">DawnScanner</a> (Ruby)</li>
+<li>File Integrity Monitoring</li>
+<li><a href="https://find-sec-bugs.github.io/">FindSecurityBugs</a> (Java)</li>
+<li><a href="https://nodesecurity.io/">NodeSecurityProject</a> (Javascript)</li>
+<li><a href="https://github.com/jeremylong/DependencyCheck">OWASPDependencyCheck</a> (Java and .NET)</li>
+<li><a href="https://pmd.github.io/">PMD Source Code Analyzer</a> (Code)</li>
+<li><a href="https://retirejs.github.io/retire.js/">RetireJS</a> (Javascript)</li>
+<li><a href="https://snyk.io/">Snyk</a> (Javascript)</li>
+<li><a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">Zap</a></li>
+</ul>
+</section>
+<section >
+<h3>What's in the box? (FILTERS)</h3>
+<ul>
+<li>Jira</li>
+<li>Zap</li>
+</ul>
+</section>
+<section >
+<h3>What's in the box? (REPORTERS)</h3>
+<ul>
+<li>CSV</li>
+<li>Jira</li>
+<li>Json</li>
+<li>Text</li>
+</ul>
+</section>
+</section>
+<section >
+<section >
+<h3>Getting started</h3>
+<h4>Native</h4>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">gem install pipeline
+</code></pre></td></tr></table>
+<h4>Docker</h4>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">docker pull owasp/pipeline:0.8.5
+docker run -i -t --entrypoint=/bin/bash owasp/pipeline:0.8.5
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Help</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">pipeline --help
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Hello World!</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">pipeline -d -t retirejs https://github.com/OWASP/NodeGoat.git
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Hello World output</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">Finding</span><span class="o">:</span> <span class="i">NodeGoat</span><span class="o">.</span><span class="i">git</span>
+<span class="i">Description</span><span class="o">:</span> <span class="i">Package</span> <span class="i">uglify</span><span class="o">-</span><span class="i">js</span><span class="o">-</span><span class="n">2.4</span><span class="o">.</span><span class="n">24</span> <span class="i">has</span> <span class="i">known</span> <span class="i">security</span> <span class="i">issues</span>
+<span class="i">Timestamp</span><span class="o">:</span> <span class="n">2016</span><span class="o">-</span><span class="n">06</span><span class="o">-</span><span class="n">24</span> <span class="n">14</span><span class="o">:</span><span class="n">43</span><span class="o">:</span><span class="n">35</span> <span class="o">+</span><span class="n">0000</span>
+<span class="i">Source</span><span class="o">:</span> {<span class="o">:</span><span class="i">scanner</span><span class="o">=&gt;</span><span class="s">&quot;RetireJS&quot;</span>, 
+         <span class="o">:</span><span class="i">file</span><span class="o">=&gt;</span><span class="s">&quot;owasp-nodejs-goat-&gt;swig-&gt;uglify-js-2.4.24&quot;</span>, 
+         <span class="o">:</span><span class="i">line</span><span class="o">=&gt;</span><span class="i">nil</span>, 
+         <span class="o">:</span><span class="i">code</span><span class="o">=&gt;</span><span class="i">nil</span>}
+<span class="i">Severity</span><span class="o">:</span> <span class="n">0</span>
+<span class="i">Fingerprint</span><span class="o">:</span>  <span class="n">041c4f08bd5a3decc502217f15b7787b654b800e092ffadb939bd99e4e2cf26d</span>
+<span class="i">Detail</span><span class="o">:</span>  <span class="i">https</span><span class="o">:</span><span class="c">//nodesecurity.io/advisories/48</span>
+</code></pre></td>
+</tr>
+</table>
+</section>
+</section>
+<section >
+<section >
+<h3>Tools vs Labels</h3>
+<p>Have to go code spelunking</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">cd ./lib/pipeline/tasks
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Example from Brakeman.rb</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="ruby">def initialize(trigger, tracker)
+    super(trigger, tracker)
+    @name = "Brakeman"
+    @description = "Source analysis for Ruby"
+    @stage = :code
+    @labels &lt;&lt; "code" &lt;&lt; "ruby" &lt;&lt; "rails"
+end
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Important pieces</h3>
+<ul>
+<li>Name (without spaces) = Tool</li>
+<li>Labels = Labels</li>
+</ul>
+</section>
+<section >
+<h3>All tools</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">av.rb:              "av"
+brakeman.rb:        "brakeman"
+bundle-audit.rb:    "bundleaudit"
+checkmarx.rb:       "checkmarx"
+dawnscanner.rb:     "dawnscanner"
+eslint.rb:          "eslint"
+fim.rb:             "fim"
+findsecbugs.rb:     "findsecuritybugs"
+nsp.rb:             "nodesecurityproject"
+owasp-dep-check.rb: "owaspdependencycheck"
+pmd.rb:             "pmd"
+retirejs.rb:        "retirejs"
+scanjs.rb:          "scanjs"
+sfl.rb:             "sfl"
+zap.rb:             "zap"
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Tools example</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">pipeline -t brakeman,eslint
+</code></pre></td></tr></table>
+<p>This will run brakeman and eslint</p>
+</section>
+<section >
+<h3>All Labels</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">av.rb:              "filesystem"
+brakeman.rb:        "code", "ruby", "rails"
+bundle-audit.rb:    "code", "ruby"
+checkmarx.rb:       "code"
+dawnscanner.rb:     "code"
+eslint.rb:          "code", "javascript"
+fim.rb:             "filesystem"
+findsecbugs.rb:     "code"
+nsp.rb:             "code"
+owasp-dep-check.rb: "code", "java", ".net"
+pmd.rb:             "code"
+retirejs.rb:        "code", "javascript"
+scanjs.rb:          "code", "javascript"
+sfl.rb:             "code"
+zap.rb:             "live"
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Labels example</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">pipeline -l ruby 
+</code></pre></td></tr></table>
+<p>This will run brakeman and bundle-audit</p>
+</section>
+</section>
+<section >
+<h3>Stages of tasks</h3>
+<ul>
+<li>Files</li>
+<li>Code</li>
+<li>Live</li>
+</ul>
+</section>
+
+
+        </div>
+    </div>
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+    <script>
+        // Add the nohighlight class and data-noescape attribute to code elements that have already been formatted by FSharp.Formatting
+        $('pre.highlighted code').addClass('nohighlight').attr('data-noescape', '');
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: 'plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+

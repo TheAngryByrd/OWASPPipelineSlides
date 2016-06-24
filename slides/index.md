@@ -35,18 +35,51 @@ Jimmy Byrd
 
 ---
 
-### How it might seem
-![CI Rube Goldeberg](images/ci-rube.gif)
+
+### Why?
+
+To prevent: 
+
+![Works on my machine](images/works-on-mine.jpg)
 
 ---
 
-### Continuous Integration Lifecycle (Simplified)
 
-- Build
-- Test
-- Deploy  
+### Continuous Integration 
 
----  
+1. Push
+2. Build*
+3. Test
+4. Report
+
+
+---
+
+
+### Merging code
+
+![Mergeing code](images/git-merge.gif)
+
+---
+
+    ./build.sh
+
+    ---------------------------------------------------------------------
+    Build Report
+    ---------------------------------------------------------------------
+    Target           Duration
+    ------           --------
+    RestoreNpm       00:00:32.4737389
+    PackWebAssets    00:00:03.7281990
+    Linter           00:00:03.3159012
+    Compile          00:00:22.2821302
+    RunTests         00:00:04.9936549
+    ScanCode         00:02:04.0223912
+    Status:          Ok 
+    ---------------------------------------------------------------------
+
+
+---
 
 ### CI Tools
 
@@ -55,10 +88,14 @@ Jimmy Byrd
 - [Gitlab](https://about.gitlab.com/gitlab-ci/)
 - [Travis](https://travis-ci.org/)
 
-
 *** 
 
 ### Testing
+![Baby Rhino Escape](images/first-test.gif)
+
+---
+
+### Security Testing
 ![Baby Rhino Escape](images/baby-rhino.gif)
 
 ---
@@ -66,21 +103,28 @@ Jimmy Byrd
 ### Automated testing hierarchy
 ![Automated Testing Pyramid](images/testing-pyramid.jpg)
 
----
+***
 
 ### [The Rugged Manifesto](https://www.ruggedsoftware.org/)
 
 I am rugged and, more importantly, my code is rugged.
+
 I recognize that software has become a foundation of our modern world.
+
 I recognize the awesome responsibility that comes with this foundational role.
+
 I recognize that my code will be used in ways I cannot anticipate, in ways it was not designed, and for longer than it was ever intended.
+
 I recognize that my code will be attacked by talented and persistent adversaries who threaten our physical, economic and national security.
 
 I recognize these things – and I choose to be rugged.
 
 I am rugged because I refuse to be a source of vulnerability or weakness.
+
 I am rugged because I assure my code will support its mission.
+
 I am rugged because my code can face these challenges and persist in spite of them.
+
 I am rugged, not because it is easy, but because it is necessary and I am up for the challenge.
 
 ***
@@ -90,6 +134,13 @@ I am rugged, not because it is easy, but because it is necessary and I am up for
 >Pipeline is a framework for running a series of tools. Generally, it is intended as a backbone for automating a security analysis pipeline of tools.
 >
 > Github README
+
+---
+
+### Maintainers
+- [Matt Tesauro](https://twitter.com/matt_tesauro)
+- [Aaron Weaver](https://twitter.com/weavera)
+- [Matt Konda](https://twitter.com/mkonda)
 
 ---
 
@@ -277,12 +328,25 @@ This will run brakeman and bundle-audit
 
 ***
 
+### Building your own task/filter/reporter is pretty easy
 
-### Stages of tasks
+***
 
-- Files
-- Code
-- Live
+### First time on your code
 
+![Bug report](images/bug-report.gif)
 
+---
 
+### Knowing is half the battle
+
+![GI Joe](images/gi-joe.gif)
+
+***
+
+### Resources
+
+- [OWASP Pipeline](https://www.owasp.org/index.php/OWASP_AppSec_Pipeline)
+- [OWASP Pipeline Github](https://github.com/OWASP/pipeline)
+- [Pipelines, DevOps and making things better - Matt Tesauro](https://www.youtube.com/watch?v=LfVhB3EiDDs)
+- [Design Approaches for Security Automation - Peleus Uhley](https://www.youtube.com/watch?v=_IushM9Ng7A)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Security Automation in your Continuous Integration Pipeline</title>
-    <meta name="description" content="Developers use unit tests and acceptances tests in continuous integration (CI) to find bugs early and often in a repeatable way. Security is an important part of any software development life cycle. So why not add security analysis tools to this pipeline? This talk will cover adding and using OWASP/pipeline, a framework made for running security analysis tools in CI.">
+    <meta name="description" content="Developers use unit tests and acceptances tests in continuous integration (CI) to find bugs early and often in a repeatable way. Security is an important part of any software development life cycle. So why not add security analysis tools to this pipeline? This talk will cover adding and using OWASP/glue, a framework made for running security analysis tools in CI.">
     <meta name="author" content="Jimmy Byrd">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -46,7 +46,8 @@
 </head>
 <body>
     <div class="reveal">
-        
+        <div class="tip" id="fs1">union case Result.Ok: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+
         <!-- Any section element inside of this container is displayed as a slide -->
         <div class="slides">
             <section >
@@ -81,6 +82,10 @@
 <p><img src="images/works-on-mine.jpg" alt="Works on my machine" /></p>
 </section>
 <section >
+<h3>Merging code</h3>
+<p><img src="images/git-merge.gif" alt="Mergeing code" /></p>
+</section>
+<section >
 <h3>Continuous Integration</h3>
 <ol>
 <li>Push</li>
@@ -88,10 +93,6 @@
 <li>Test</li>
 <li>Report</li>
 </ol>
-</section>
-<section >
-<h3>Merging code</h3>
-<p><img src="images/git-merge.gif" alt="Mergeing code" /></p>
 </section>
 <section >
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
@@ -123,7 +124,7 @@
 <span class="i">Compile</span>          <span class="n">00</span><span class="o">:</span><span class="n">00</span><span class="o">:</span><span class="n">22.2821302</span>
 <span class="i">RunTests</span>         <span class="n">00</span><span class="o">:</span><span class="n">00</span><span class="o">:</span><span class="n">04.9936549</span>
 <span class="i">ScanCode</span>         <span class="n">00</span><span class="o">:</span><span class="n">02</span><span class="o">:</span><span class="n">04.0223912</span>
-<span class="i">Status</span><span class="o">:</span>          <span class="i">Ok</span> 
+<span class="i">Status</span><span class="o">:</span>          <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Ok</span> 
 <span class="o">---------------------------------------------------------------------</span>
 </code></pre></td>
 </tr>
@@ -136,22 +137,54 @@
 <li><a href="https://jenkins.io/">Jenkins</a></li>
 <li><a href="https://about.gitlab.com/gitlab-ci/">Gitlab</a></li>
 <li><a href="https://travis-ci.org/">Travis</a></li>
+<li><a href="https://www.appveyor.com/">AppVeyor</a></li>
 </ul>
 </section>
 </section>
 <section >
 <section >
-<h3>Testing</h3>
-<p><img src="images/first-test.gif" alt="Baby Rhino Escape" /></p>
-</section>
-<section >
-<h3>Security Testing</h3>
-<p><img src="images/baby-rhino.gif" alt="Baby Rhino Escape" /></p>
+<h3>Software Testing</h3>
+<p><img src="images/first-test.gif" alt="First test" /></p>
 </section>
 <section >
 <h3>Automated testing hierarchy</h3>
 <p><img src="images/testing-pyramid.jpg" alt="Automated Testing Pyramid" /></p>
 </section>
+</section>
+<section >
+<section >
+<h3>Why aren't we writing security tests?</h3>
+<p><img src="images/baby-rhino.gif" alt="Baby Rhino Escape" /></p>
+</section>
+<section >
+<h2><a href="https://en.wikipedia.org/wiki/Non-functional_requirement">Security is an -ility</a></h2>
+<p>Much like accessiblity, scalability, privacy</p>
+</section>
+</section>
+<section >
+<section >
+<p>What are we trying to solve?</p>
+</section>
+<section >
+<h3><a href="https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)">Cross Site Scripting</a></h3>
+<p><img src="images/carfall.gif" alt="Car fall" /></p>
+</section>
+<section >
+<h3>Committing the production database password to source control</h3>
+<p><img src="images/pearlfreak.gif" alt="Pearl freaking out" /></p>
+</section>
+<section >
+<h3><a href="https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet">Storing plain text passwords</a></h3>
+<p><img src="images/muuniversefreak.gif" alt="Mr Universe" /></p>
+</section>
+<section >
+<h3><a href="https://www.owasp.org/index.php/SQL_Injection">Sql Injection</a></h3>
+<p><img src="images/larsfire.gif" alt="Lars Fire" /></p>
+</section>
+</section>
+<section >
+<h3>Why don't we have both?</h3>
+<p><img src="images/why-not-both.gif" alt="Why not both" /></p>
 </section>
 <section >
 <h3><a href="https://www.ruggedsoftware.org/">The Rugged Manifesto</a></h3>
@@ -168,11 +201,20 @@
 </section>
 <section >
 <section >
-<h3><a href="https://github.com/OWASP/pipeline">OWASP/Pipeline</a></h3>
+<h3><a href="https://github.com/OWASP/glue">OWASP/Glue</a></h3>
 <blockquote>
-<p>Pipeline is a framework for running a series of tools. Generally, it is intended as a backbone for automating a security analysis pipeline of tools.</p>
+<p>Glue is a framework for running a series of tools. Generally, it is intended as a backbone for automating a security analysis pipeline of tools.</p>
 <p>Github README</p>
 </blockquote>
+</section>
+<section >
+<h3>Recently renamed</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">s</span><span class="o">/</span><span class="i">pipeline</span><span class="o">/</span><span class="i">glue</span>
+</code></pre></td>
+</tr>
+</table>
 </section>
 <section >
 <h3>Maintainers</h3>
@@ -242,28 +284,28 @@
 <h4>Native</h4>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip"><code lang="bash">gem install pipeline
+<td class="snippet"><pre class="fssnip"><code lang="bash">gem install owasp-glue
 </code></pre></td></tr></table>
 <h4>Docker</h4>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip"><code lang="bash">docker pull owasp/pipeline:0.8.5
-docker run -i -t --entrypoint=/bin/bash owasp/pipeline:0.8.5
+<td class="snippet"><pre class="fssnip"><code lang="bash">docker pull owasp/glue
+docker run -i -t --entrypoint=/bin/bash owasp/glue
 </code></pre></td></tr></table>
 </section>
 <section >
 <h3>Help</h3>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip"><code lang="bash">pipeline --help
+<td class="snippet"><pre class="fssnip"><code lang="bash">glue --help
 </code></pre></td></tr></table>
 </section>
 <section >
 <h3>Hello World!</h3>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip"><code lang="bash">pipeline -d -t retirejs https://github.com/OWASP/NodeGoat.git
+<td class="snippet"><pre class="fssnip"><code lang="bash">glue -t eslint,retirejs https://github.com/OWASP/NodeGoat.git
 </code></pre></td></tr></table>
 </section>
 <section >
@@ -296,11 +338,15 @@ docker run -i -t --entrypoint=/bin/bash owasp/pipeline:0.8.5
 </section>
 <section >
 <section >
+<h3>Tasks</h3>
+<p>Tools vs Labels</p>
+</section>
+<section >
 <h3>Tools vs Labels</h3>
 <p>Have to go code spelunking</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip"><code lang="bash">cd ./lib/pipeline/tasks
+<td class="snippet"><pre class="fssnip"><code lang="bash">cd ./lib/glue/tasks
 </code></pre></td></tr></table>
 </section>
 <section >
@@ -368,7 +414,7 @@ zap.rb:             "zap"
 <h3>Tools example</h3>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip"><code lang="bash">pipeline -t brakeman,eslint
+<td class="snippet"><pre class="fssnip"><code lang="bash">glue -t brakeman,eslint
 </code></pre></td></tr></table>
 <p>This will run brakeman and eslint</p>
 </section>
@@ -411,13 +457,102 @@ zap.rb:             "live"
 <h3>Labels example</h3>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip"><code lang="bash">pipeline -l ruby 
+<td class="snippet"><pre class="fssnip"><code lang="bash">glue -l ruby 
 </code></pre></td></tr></table>
 <p>This will run brakeman and bundle-audit</p>
 </section>
 </section>
 <section >
 <h3>Building your own task/filter/reporter is pretty easy</h3>
+</section>
+<section >
+<section >
+<h3><a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP/ZAP</a></h3>
+<blockquote>
+<p>The OWASP Zed Attack Proxy (ZAP) is one of the world’s most popular free security tools [...] It can help you automatically find security vulnerabilities in your web applications while you are developing and testing your applications.</p>
+</blockquote>
+</section>
+<section >
+<h3>Getting started</h3>
+<h4>Native</h4>
+<p><a href="https://github.com/zaproxy/zaproxy/wiki/Downloads">Download page</a></p>
+<h4>Docker</h4>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"> [<span class="i">lang</span><span class="o">=</span><span class="i">bash</span>]
+<span class="i">docker</span> <span class="i">pull</span> <span class="i">owasp</span><span class="o">/</span><span class="i">zap2docker</span><span class="o">-</span><span class="i">stable</span>
+<span class="i">docker</span> <span class="i">run</span> <span class="o">-</span><span class="i">i</span> <span class="o">-</span><span class="i">t</span> <span class="o">--</span><span class="i">entrypoint</span><span class="o">=/</span><span class="i">bin</span><span class="o">/</span><span class="i">bash</span> <span class="i">owasp</span><span class="o">/</span><span class="i">zap2docker</span><span class="o">-</span><span class="i">stable</span>
+</code></pre></td>
+</tr>
+</table>
+</section>
+<section >
+<h4>GUI</h4>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">docker run -u zap -p 8080:8080 -p 8090:8090 -i \
+  owasp/zap2docker-stable zap-webswing.sh
+
+open "http://$(docker-machine ip default):8080/?anonym=true&amp;app=ZAP"
+</code></pre></td></tr></table>
+<h4>Headless</h4>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">docker run -u zap -p 8080:8080 -i owasp/zap2docker-stable \
+  zap-x.sh -daemon -host 0.0.0.0 -port 8080
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Rest APIs</h3>
+<ul>
+<li><a href="https://github.com/zaproxy/zaproxy/releases">Java</a></li>
+<li><a href="https://github.com/SUSE/owasp_zap">Ruby</a></li>
+<li><a href="https://pypi.python.org/pypi/python-owasp-zap-v2.4">Python</a></li>
+<li><a href="https://www.npmjs.com/package/zaproxy">NodeJS</a></li>
+<li><a href="https://www.nuget.org/packages/OWASPZAPDotNetAPI/">.net</a></li>
+<li><a href="https://packagist.org/packages/zaproxy/php-owasp-zap-v2">PHP</a></li>
+</ul>
+</section>
+<section >
+<h4>zap-cli</h4>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="bash">docker run -i owasp/zap2docker-stable zap-cli quick-scan --self-contained \
+--start-options '-config api.disablekey=true' http://target
+</code></pre></td></tr></table>
+</section>
+<section >
+<h3>Results</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="o">+----------------------------------+--------+----------+------------------------+</span>
+| <span class="i">Alert</span>                            | <span class="i">Risk</span>   |   <span class="i">CWE</span> <span class="i">ID</span> | <span class="i">URL</span>                    |
+<span class="o">+==================================+========+==========+========================+</span>
+| <span class="i">Cross</span> <span class="i">Site</span> <span class="i">Scripting</span> (<span class="i">Reflected</span>) | <span class="i">High</span>   |       <span class="n">79</span> | <span class="i">http</span><span class="o">:</span><span class="c">//web:4000/login  |</span>
+<span class="o">+----------------------------------+--------+----------+------------------------+</span>
+| <span class="i">Cross</span> <span class="i">Site</span> <span class="i">Scripting</span> (<span class="i">Reflected</span>) | <span class="i">High</span>   |       <span class="n">79</span> | <span class="i">http</span><span class="o">:</span><span class="c">//web:4000/signup |</span>
+<span class="o">+----------------------------------+--------+----------+------------------------+</span>
+| <span class="i">Cross</span> <span class="i">Site</span> <span class="i">Scripting</span> (<span class="i">Reflected</span>) | <span class="i">High</span>   |       <span class="n">79</span> | <span class="i">http</span><span class="o">:</span><span class="c">//web:4000/signup |</span>
+<span class="o">+----------------------------------+--------+----------+------------------------+</span>
+</code></pre></td>
+</tr>
+</table>
+</section>
 </section>
 <section >
 <section >
@@ -432,10 +567,11 @@ zap.rb:             "live"
 <section >
 <h3>Resources</h3>
 <ul>
-<li><a href="https://www.owasp.org/index.php/OWASP_AppSec_Pipeline">OWASP Pipeline</a></li>
-<li><a href="https://github.com/OWASP/pipeline">OWASP Pipeline Github</a></li>
+<li><a href="https://www.owasp.org/index.php/OWASP_Glue_Tool_Project">OWASP Glue</a></li>
+<li><a href="https://github.com/OWASP/glue">OWASP Glue Github</a></li>
 <li><a href="https://www.youtube.com/watch?v=LfVhB3EiDDs">Pipelines, DevOps and making things better - Matt Tesauro</a></li>
 <li><a href="https://www.youtube.com/watch?v=_IushM9Ng7A">Design Approaches for Security Automation - Peleus Uhley</a></li>
+<li><a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a></li>
 </ul>
 </section>
 

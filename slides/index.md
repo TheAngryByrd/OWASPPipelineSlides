@@ -1,5 +1,5 @@
 - title : Security Automation in your Continuous Integration Pipeline
-- description : Developers use unit tests and acceptances tests in continuous integration (CI) to find bugs early and often in a repeatable way. Security is an important part of any software development life cycle. So why not add security analysis tools to this pipeline? This talk will cover adding and using OWASP/pipeline, a framework made for running security analysis tools in CI.
+- description : Developers use unit tests and acceptances tests in continuous integration (CI) to find bugs early and often in a repeatable way. Security is an important part of any software development life cycle. So why not add security analysis tools to this pipeline? This talk will cover adding and using OWASP/glue, a framework made for running security analysis tools in CI.
 - author : Jimmy Byrd
 - theme : night
 - transition : default
@@ -23,6 +23,9 @@ https://theangrybyrd.github.io/OWASPPipelineSlides
 
 ![Binary Defense Systems](images/bds.png)
 
+
+
+
 ***
 
 ### Continuous what now?
@@ -37,7 +40,6 @@ https://theangrybyrd.github.io/OWASPPipelineSlides
 
 ---
 
-
 ### Why?
 
 To prevent: 
@@ -46,6 +48,11 @@ To prevent:
 
 ---
 
+### Merging code
+
+![Mergeing code](images/git-merge.gif)
+
+---
 
 ### Continuous Integration 
 
@@ -53,14 +60,6 @@ To prevent:
 2. Build*
 3. Test
 4. Report
-
-
----
-
-
-### Merging code
-
-![Mergeing code](images/git-merge.gif)
 
 ---
 
@@ -89,21 +88,60 @@ To prevent:
 - [Jenkins](https://jenkins.io/)
 - [Gitlab](https://about.gitlab.com/gitlab-ci/)
 - [Travis](https://travis-ci.org/)
+- [AppVeyor](https://www.appveyor.com/)
 
 *** 
 
-### Testing
-![Baby Rhino Escape](images/first-test.gif)
-
----
-
-### Security Testing
-![Baby Rhino Escape](images/baby-rhino.gif)
+### Software Testing 
+![First test](images/first-test.gif)
 
 ---
 
 ### Automated testing hierarchy
 ![Automated Testing Pyramid](images/testing-pyramid.jpg)
+
+***
+
+### Why aren't we writing security tests?
+![Baby Rhino Escape](images/baby-rhino.gif)
+
+---
+
+## [Security is an -ility](https://en.wikipedia.org/wiki/Non-functional_requirement)
+
+Much like accessiblity, scalability, privacy
+
+
+***
+
+What are we trying to solve?
+
+---
+
+###  [Cross Site Scripting](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS))
+![Car fall](images/carfall.gif)
+
+---
+
+### Committing the production database password to source control
+![Pearl freaking out](images/pearlfreak.gif)
+
+
+---
+
+### [Storing plain text passwords](https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet)
+![Mr Universe](images/muuniversefreak.gif)
+
+---
+
+### [Sql Injection](https://www.owasp.org/index.php/SQL_Injection)
+![Lars Fire](images/larsfire.gif)
+
+***
+
+### Why don't we have both?
+![Why not both](images/why-not-both.gif)
+
 
 ***
 
@@ -131,11 +169,19 @@ I am rugged, not because it is easy, but because it is necessary and I am up for
 
 ***
 
-### [OWASP/Pipeline](https://github.com/OWASP/pipeline)
+### [OWASP/Glue](https://github.com/OWASP/glue)
 
->Pipeline is a framework for running a series of tools. Generally, it is intended as a backbone for automating a security analysis pipeline of tools.
+>Glue is a framework for running a series of tools. Generally, it is intended as a backbone for automating a security analysis pipeline of tools.
 >
 > Github README
+
+---
+
+### Recently renamed
+
+```
+s/pipeline/glue
+```
 
 ---
 
@@ -203,27 +249,27 @@ I am rugged, not because it is easy, but because it is necessary and I am up for
 ####Native
 
     [lang=bash]
-    gem install pipeline
+    gem install owasp-glue
 
 ####Docker
 
     [lang=bash]
-    docker pull owasp/pipeline:0.8.5
-    docker run -i -t --entrypoint=/bin/bash owasp/pipeline:0.8.5
+    docker pull owasp/glue
+    docker run -i -t --entrypoint=/bin/bash owasp/glue
 
 ---
 
 ###Help 
 
     [lang=bash]
-    pipeline --help
+    glue --help
     
 ---
 
 ###Hello World!
 
     [lang=bash]
-    pipeline -d -t retirejs https://github.com/OWASP/NodeGoat.git
+    glue -t eslint,retirejs https://github.com/OWASP/NodeGoat.git
 
 ---
 
@@ -242,12 +288,18 @@ I am rugged, not because it is easy, but because it is necessary and I am up for
 
 ***
 
+### Tasks
+
+Tools vs Labels
+
+---
+
 ### Tools vs Labels
 
 Have to go code spelunking
 
     [lang=bash]
-    cd ./lib/pipeline/tasks
+    cd ./lib/glue/tasks
 ---
 
 ###Example from Brakeman.rb
@@ -294,7 +346,7 @@ Have to go code spelunking
 ### Tools example
 
     [lang=bash]
-    pipeline -t brakeman,eslint
+    glue -t brakeman,eslint
 
 This will run brakeman and eslint
 
@@ -324,7 +376,7 @@ This will run brakeman and eslint
 ### Labels example
 
     [lang=bash]
-    pipeline -l ruby 
+    glue -l ruby 
 
 This will run brakeman and bundle-audit
 
@@ -333,6 +385,78 @@ This will run brakeman and bundle-audit
 ### Building your own task/filter/reporter is pretty easy
 
 ***
+
+### [OWASP/ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
+> The OWASP Zed Attack Proxy (ZAP) is one of the world’s most popular free security tools [...] It can help you automatically find security vulnerabilities in your web applications while you are developing and testing your applications.
+
+
+---
+
+### Getting started
+#### Native 
+[Download page](https://github.com/zaproxy/zaproxy/wiki/Downloads)
+
+#### Docker
+
+     [lang=bash]
+    docker pull owasp/zap2docker-stable
+    docker run -i -t --entrypoint=/bin/bash owasp/zap2docker-stable
+
+---
+
+#### GUI
+    [lang=bash]
+    docker run -u zap -p 8080:8080 -p 8090:8090 -i \
+      owasp/zap2docker-stable zap-webswing.sh
+
+    open "http://$(docker-machine ip default):8080/?anonym=true&app=ZAP"
+
+
+
+#### Headless
+    [lang=bash]
+    docker run -u zap -p 8080:8080 -i owasp/zap2docker-stable \
+      zap-x.sh -daemon -host 0.0.0.0 -port 8080
+
+---
+
+### Rest APIs
+* [Java](https://github.com/zaproxy/zaproxy/releases)
+* [Ruby](https://github.com/SUSE/owasp_zap)
+* [Python](https://pypi.python.org/pypi/python-owasp-zap-v2.4)
+* [NodeJS](https://www.npmjs.com/package/zaproxy)
+* [.net](https://www.nuget.org/packages/OWASPZAPDotNetAPI/)
+* [PHP](https://packagist.org/packages/zaproxy/php-owasp-zap-v2)
+
+
+---
+
+
+
+#### zap-cli
+
+    [lang=bash]
+    docker run -i owasp/zap2docker-stable zap-cli quick-scan --self-contained \
+    --start-options '-config api.disablekey=true' http://target
+
+
+---
+### Results 
+
+```
++----------------------------------+--------+----------+------------------------+
+| Alert                            | Risk   |   CWE ID | URL                    |
++==================================+========+==========+========================+
+| Cross Site Scripting (Reflected) | High   |       79 | http://web:4000/login  |
++----------------------------------+--------+----------+------------------------+
+| Cross Site Scripting (Reflected) | High   |       79 | http://web:4000/signup |
++----------------------------------+--------+----------+------------------------+
+| Cross Site Scripting (Reflected) | High   |       79 | http://web:4000/signup |
++----------------------------------+--------+----------+------------------------+
+```
+
+***
+
 
 ### First time on your code
 
@@ -348,7 +472,8 @@ This will run brakeman and bundle-audit
 
 ### Resources
 
-- [OWASP Pipeline](https://www.owasp.org/index.php/OWASP_AppSec_Pipeline)
-- [OWASP Pipeline Github](https://github.com/OWASP/pipeline)
+- [OWASP Glue](https://www.owasp.org/index.php/OWASP_Glue_Tool_Project)
+- [OWASP Glue Github](https://github.com/OWASP/glue)
 - [Pipelines, DevOps and making things better - Matt Tesauro](https://www.youtube.com/watch?v=LfVhB3EiDDs)
 - [Design Approaches for Security Automation - Peleus Uhley](https://www.youtube.com/watch?v=_IushM9Ng7A)
+- [OWASP ZAP](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
